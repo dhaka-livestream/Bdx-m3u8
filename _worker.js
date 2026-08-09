@@ -25,12 +25,16 @@ export default {
     // 📌 চ্যানেল কনফিগারেশন (ডিফল্ট ৬টি)
     // ============================================================
     const CHANNELS = {
-      'star_jalsha': {
+      'starjalshahd-bdx1': {
         url: 'http://103.165.93.31:8095/starJalsha/tracks-v1a1/mono.m3u8',
         type: 'redirect'
       },
       'zeebanglahd-bdx1': {
         url: 'http://103.165.93.31:8095/zeeBangla/tracks-v1a1/mono.m3u8',
+        type: 'redirect'
+      },
+      'sonyaath-bdx1': {
+        url: 'http://103.165.93.31:8095/sonyAath/tracks-v1a1/mono.m3u8',
         type: 'redirect'
       },
       'zee_bangla': {
