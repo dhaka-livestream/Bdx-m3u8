@@ -1,4 +1,4 @@
-// _worker.js – সব ব্রাউজার ও প্লেয়ার চলবে, শুধু HTTP Canary-সদৃশ টুল ব্লক
+// _worker.js – শুধু HTTP Canary-সদৃশ টুল ব্লক, বাকি সব প্লেয়ার/ব্রাউজার চলবে
 
 export default {
   async fetch(request) {
@@ -6,13 +6,13 @@ export default {
     const path = url.pathname;
     const userAgent = request.headers.get('User-Agent') || '';
 
-    // 🛡️ শুধু এই User-Agent-গুলো ব্লক (HTTP Canary, স্নিফার, স্ক্র্যাপার)
+    // 🛡️ শুধুমাত্র HTTP Canary ও তার মতো টুল ব্লক (খুব সংকীর্ণ তালিকা)
     const BLOCKED_AGENTS = [
-      'okhttp', 'httpcanary', 'Dalvik', 'AndroidDownloadManager',
-      'python-requests', 'curl', 'wget', 'Go-http-client'
+      'httpcanary', // HTTP Canary অ্যাপ
+      'okhttp',     // OkHttp লাইব্রেরি (অনেক স্নিফার ব্যবহার করে)
     ];
 
-    // চেক: ব্লক তালিকায় আছে কিনা
+    // চেক: ব্লক তালিকায় আছে কিনা (কেস ইনসেনসিটিভ)
     const isBlocked = BLOCKED_AGENTS.some(agent => userAgent.toLowerCase().includes(agent.toLowerCase()));
     if (isBlocked) {
       return new Response('🚫 Access Denied: HTTP Canary or similar tool detected.', { 
@@ -49,7 +49,7 @@ export default {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/sony_sab_576/sony_sab_576.m3u8?bitrate=500000&channel=sony_sab_576&gp_id=',
         type: 'proxy'
       }
-      // 👇 এখানে নতুন চ্যানেল যোগ করুন
+      // 👇 এখানে নতুন চ্যানেল যোগ করুন (শেষ আইটেমের পরে কমা দেবেন না)
     };
 
     const match = path.match(/^\/(.+)\.m3u8$/);
@@ -113,8 +113,8 @@ export default {
       }
     }
 
-    // হোম পেজ – সব ব্রাউজারে খোলা থাকবে (যেহেতু ALLOWED_PLAYERS বাদ)
+    // হোম পেজ – সব ব্রাউজারে খোলা থাকবে
     const list = Object.keys(CHANNELS).map(ch => `/${ch}.m3u8 (${CHANNELS[ch].type})`).join('\n');
-    return new Response(`✅ Secure Proxy Active.\n\nAvailable Channels:\n${list}\n\n📌 Works in all browsers, VLC, MX Player, OttNavigator, etc. HTTP Canary blocked.`, { status: 200 });
+    return new Response(`✅ Secure Proxy Active.\n\nAvailable Channels:\n${list}\n\n📌 Works in browsers, VLC, MX Player, OttNavigator, and all IPTV players. HTTP Canary blocked.`, { status: 200 });
   }
 };
