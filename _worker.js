@@ -37,8 +37,8 @@ export default {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/b4u_music/playlist.m3u8',
         type: 'proxy'
       },
-      'colors': {
-        url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/colors_576/colors_576.m3u8?bitrate=500000&channel=colors_576&gp_id=',
+      'andpicture_hd': {
+        url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/andpicture_hd/playlist.m3u8',
         type: 'proxy'
       },
       'mtv': {
