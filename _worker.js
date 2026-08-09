@@ -14,7 +14,7 @@ export default {
     // ২. বাকি চ্যানেলগুলো: আগের মতোই s2 প্রক্সি দিয়ে ফেচ করব
     const CHANNELS = {
       'zee_bangla': 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/zee_bangla_576/zee_bangla_576.m3u8?bitrate=1000000&channel=zee_bangla_576&gp_id=',
-      'starplus': 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/starplus_576/starplus_576.m3u8?bitrate=1000000&channel=starplus_576&gp_id='
+      'jalshamovies': 'http://line.umetop.pro/play/live.php?mac=00:1A:79:8F:BA:8A&stream=225776&extension=m3u8'
     };
 
     const match = path.match(/^\/(.+)\.m3u8$/);
