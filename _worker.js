@@ -1,4 +1,4 @@
-// _worker.js – সম্পূর্ণ প্রক্সি, কোনো redirect নেই, সেগমেন্ট রিরাইট, স্নিফার ব্লক
+// _worker.js – star_jalsha (redirect), বাকি (proxy) + ব্রাউজার/স্নিফার ব্লক
 
 export default {
   async fetch(request) {
@@ -8,7 +8,7 @@ export default {
     const accept = request.headers.get('Accept') || '';
 
     // ============================================================
-    // ১. স্নিফার/ডাউনলোডার/ব্রাউজার ব্ল্যাকলিস্ট
+    // ১. স্নিফার/ডাউনলোডার ব্ল্যাকলিস্ট
     // ============================================================
     const BLOCKED_AGENTS = [
       'idm', 'internet download manager', 'download master', 'downloadstudio',
@@ -22,7 +22,7 @@ export default {
     }
 
     // ============================================================
-    // ২. ব্রাউজার চেক (শুধু .m3u8 রিকোয়েস্টের জন্য)
+    // ২. ব্রাউজার ডিটেক্ট (শুধু .m3u8 রিকোয়েস্টে ব্লক)
     // ============================================================
     const isBrowser = 
       (userAgent.includes('Mozilla') || accept.includes('text/html')) &&
@@ -34,48 +34,44 @@ export default {
       !userAgent.includes('OttNavigator');
 
     if (path.endsWith('.m3u8') && isBrowser) {
-      return new Response('🚫 Access Denied: Use a media player (VLC, MX Player, OttNavigator).', { status: 403 });
+      return new Response('🚫 Access Denied: Use VLC, MX Player, or OttNavigator.', { status: 403 });
     }
 
     // ============================================================
-    // ৩. চ্যানেল কনফিগারেশন (সব proxy, redirect নেই)
+    // ৩. চ্যানেল কনফিগারেশন
     // ============================================================
     const CHANNELS = {
+      // star_jalsha – REDIRECT (কারণ proxy কাজ করে না)
       'star_jalsha': {
         url: 'http://103.165.93.31:8095/starJalsha/tracks-v1a1/mono.m3u8',
-        type: 'proxy',          // সব proxy
-        useS2: false            // স্পেশাল: s2 ব্যবহার করবে না, সরাসরি fetch
+        type: 'redirect'
       },
+      // ToffeeLive চ্যানেল – PROXY
       'zee_bangla': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/zee_bangla_576/zee_bangla_576.m3u8?bitrate=500000&channel=zee_bangla_576&gp_id=',
-        type: 'proxy',
-        useS2: true
+        type: 'proxy'
       },
       'starplus': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/starplus_576/starplus_576.m3u8?bitrate=500000&channel=starplus_576&gp_id=',
-        type: 'proxy',
-        useS2: true
+        type: 'proxy'
       },
       'colors': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/colors_576/colors_576.m3u8?bitrate=500000&channel=colors_576&gp_id=',
-        type: 'proxy',
-        useS2: true
+        type: 'proxy'
       },
       'mtv': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/mtv_576/mtv_576.m3u8?bitrate=500000&channel=mtv_576&gp_id=',
-        type: 'proxy',
-        useS2: true
+        type: 'proxy'
       },
       'sony_sab': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/sony_sab_576/sony_sab_576.m3u8?bitrate=500000&channel=sony_sab_576&gp_id=',
-        type: 'proxy',
-        useS2: true
+        type: 'proxy'
       }
     };
 
     const match = path.match(/^\/(.+)\.m3u8$/);
     if (!match) {
-      const list = Object.keys(CHANNELS).map(ch => `/${ch}.m3u8`).join('\n');
+      const list = Object.keys(CHANNELS).map(ch => `/${ch}.m3u8 (${CHANNELS[ch].type})`).join('\n');
       return new Response(`✅ Proxy Active.\n\nAvailable:\n${list}`, { status: 200 });
     }
 
@@ -85,65 +81,56 @@ export default {
       return new Response('Channel not found', { status: 404 });
     }
 
-    // ---------- প্রক্সি লজিক ----------
-    let targetUrl = config.url;
-
-    // যদি useS2 সত্য হয়, তাহলে s2 প্রক্সি দিয়ে ফেচ
-    if (config.useS2) {
-      targetUrl = `https://s2.itcnbd.live/server-2/proxy/${channelName}/playlist?u=${encodeURIComponent(config.url)}`;
+    // ---------- রিডাইরেক্ট ----------
+    if (config.type === 'redirect') {
+      // শুধু প্লেয়াররা (ইতিমধ্যে isBrowser পাস করেই এসেছে) রিডাইরেক্ট পাবে
+      return Response.redirect(config.url, 302);
     }
-    // না হলে সরাসরি fetch (star_jalsha-এর জন্য)
 
-    try {
-      const response = await fetch(targetUrl, {
-        headers: {
-          'User-Agent': 'VLC/3.0.18',
-          'Referer': config.url.includes('toffeelive.com') ? 'https://www.toffeelive.com/' : 'http://103.165.93.31:8095/'
+    // ---------- প্রক্সি ----------
+    if (config.type === 'proxy') {
+      const proxyUrl = `https://s2.itcnbd.live/server-2/proxy/${channelName}/playlist?u=${encodeURIComponent(config.url)}`;
+
+      try {
+        const response = await fetch(proxyUrl, {
+          headers: {
+            'User-Agent': 'VLC/3.0.18',
+            'Referer': 'https://www.toffeelive.com/'
+          }
+        });
+
+        if (!response.ok) {
+          return new Response(`Proxy fetch failed: ${response.status}`, { status: response.status });
         }
-      });
 
-      if (!response.ok) {
-        return new Response(`Fetch failed: ${response.status}`, { status: response.status });
+        let content = await response.text();
+
+        // সেগমেন্ট রিরাইট (পূর্ণাঙ্গ লিংক)
+        const base = new URL(config.url);
+        const basePath = base.pathname.substring(0, base.pathname.lastIndexOf('/') + 1);
+        const lines = content.split('\n');
+        const newLines = lines.map(line => {
+          const trimmed = line.trim();
+          if (trimmed === '' || trimmed.startsWith('#') || trimmed.match(/^https?:\/\//)) return line;
+          if (trimmed.startsWith('/')) return base.origin + trimmed;
+          return base.origin + basePath + trimmed;
+        });
+        content = newLines.join('\n');
+
+        return new Response(content, {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/vnd.apple.mpegurl',
+            'Cache-Control': 'public, max-age=2, stale-while-revalidate=30',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+
+      } catch (error) {
+        return new Response('Proxy Error: ' + error.message, { status: 500 });
       }
-
-      let content = await response.text();
-
-      // ---------- সেগমেন্ট রিরাইট (সব লিংক পূর্ণাঙ্গ + আপনার ডোমেইনে) ----------
-      const base = new URL(config.url);
-      const baseOrigin = base.origin;
-      const basePath = base.pathname.substring(0, base.pathname.lastIndexOf('/') + 1);
-
-      const lines = content.split('\n');
-      const newLines = lines.map(line => {
-        const trimmed = line.trim();
-        if (trimmed === '' || trimmed.startsWith('#') || trimmed.match(/^https?:\/\//)) {
-          return line;
-        }
-        // রিলেটিভ পাথ পূর্ণাঙ্গ করি
-        let fullUrl;
-        if (trimmed.startsWith('/')) {
-          fullUrl = baseOrigin + trimmed;
-        } else {
-          fullUrl = baseOrigin + basePath + trimmed;
-        }
-        // এখন fullUrl-কে আপনার প্রক্সি ডোমেইনের পাথে রূপান্তর করুন (ঐচ্ছিক)
-        // আপনি চাইলে এখানে সেগমেন্টগুলোকে আপনার ডোমেইনে এনে দিতে পারেন, কিন্তু তখন সেগমেন্ট fetch করতে আবার Worker-এ হিট হবে।
-        // আমি সরাসরি fullUrl রেখে দিচ্ছি, কারণ এটি মূল CDN থেকে লোড হবে (দ্রুত) এবং ইউজার তো সোর্স লিংক দেখবে না (কারণ DevTools ব্লক)।
-        return fullUrl;
-      });
-      content = newLines.join('\n');
-
-      return new Response(content, {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/vnd.apple.mpegurl',
-          'Cache-Control': 'public, max-age=2, stale-while-revalidate=30',
-          'Access-Control-Allow-Origin': '*'
-        }
-      });
-
-    } catch (error) {
-      return new Response('Proxy Error: ' + error.message, { status: 500 });
     }
+
+    return new Response('Invalid config', { status: 500 });
   }
 };
