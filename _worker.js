@@ -29,6 +29,10 @@ export default {
         url: 'http://103.165.93.31:8095/starJalsha/tracks-v1a1/mono.m3u8',
         type: 'redirect'
       },
+      'zeebanglahd-bdx1': {
+        url: 'http://103.165.93.31:8095/zeeBangla/tracks-v1a1/mono.m3u8',
+        type: 'redirect'
+      },
       'zee_bangla': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/zee_bangla_576/zee_bangla_576.m3u8?bitrate=500000&channel=zee_bangla_576&gp_id=',
         type: 'proxy'
