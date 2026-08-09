@@ -37,8 +37,8 @@ export default {
         url: 'http://103.165.93.31:8095/sonyAath/tracks-v1a1/mono.m3u8',
         type: 'redirect'
       },
-      'colorsbdcinema-sdr': {
-        url: 'http://live.balajibroadband.com:3500/live/1657.m3u8',
+      'colorsbdcinema-bdx1': {
+        url: 'http://103.165.93.31:8095/colorsBanglaChinema/tracks-v1a1/mono.m3u8',
         type: 'redirect'
       },
       'zee_bangla': {
