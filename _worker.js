@@ -61,6 +61,10 @@ export default {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/b4u_music/playlist.m3u8',
         type: 'proxy'
       },
+      'zee_bangla_cinema': {
+        url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/zee_bangla_cinema/playlist.m3u8',
+        type: 'proxy'
+      },
       'andpicture_hd': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/andpicture_hd/playlist.m3u8',
         type: 'proxy'
