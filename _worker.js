@@ -78,7 +78,7 @@ export default {
         type: 'proxy'
       },
       'sony_aath': {
-        url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/sonyaath_576/sonyaath_576.m3u8?bitrate=1000000&channel=sonyaath_576&gp_id=',
+        url: 'https%3A%2F%2Fbldcmprod-cdn.toffeelive.com%2Fcdn%2Flive%2Fslang%2Fsonyaath_576%2Fsonyaath_576.m3u8%3Fbitrate%3D1000000%26channel%3Dsonyaath_576%26gp_id%3D',
         type: 'proxy'
       },
       'sony_sab': {
