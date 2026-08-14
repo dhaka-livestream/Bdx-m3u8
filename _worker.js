@@ -37,6 +37,10 @@ export default {
         url: 'https://mumt03.tangotv.in/Dsly5z3HAAKASHAATH/tracks-v2a1/mono.m3u8',
         type: 'redirect'
       },
+      'sunbangla': {
+        url: 'http://27.124.71.27/Sun_Bangla/index.m3u8',
+        type: 'redirect'
+      },
       'jalshamovieshd-bdx1': {
         url: 'http://103.165.93.31:8095/jalshaMovies/tracks-v1a1/mono.m3u8',
         type: 'redirect'
