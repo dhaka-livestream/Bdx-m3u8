@@ -34,7 +34,7 @@ export default {
         type: 'redirect'
       },
       'Akash8': {
-        url: 'https://cdn-4.pishow.tv/live/969/969_1.m3u8',
+        url: 'https://mumt03.tangotv.in/Dsly5z3HAAKASHAATH/tracks-v2a1/mono.m3u8',
         type: 'redirect'
       },
       'jalshamovieshd-bdx1': {
