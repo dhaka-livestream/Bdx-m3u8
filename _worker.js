@@ -77,6 +77,10 @@ export default {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/mtv_576/mtv_576.m3u8?bitrate=500000&channel=mtv_576&gp_id=',
         type: 'proxy'
       },
+      'sony_aath': {
+        url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/sonyaath_576/sonyaath_576.m3u8?bitrate=1000000&channel=sonyaath_576&gp_id=',
+        type: 'proxy'
+      },
       'sony_sab': {
         url: 'https://bldcmprod-cdn.toffeelive.com/cdn/live/slang/sony_sab_576/sony_sab_576.m3u8?bitrate=500000&channel=sony_sab_576&gp_id=',
         type: 'proxy'
