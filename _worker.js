@@ -33,6 +33,10 @@ export default {
         url: 'http://103.165.93.31:8095/colorsBangla/tracks-v1a1/mono.m3u8',
         type: 'redirect'
       },
+      'Akash8': {
+        url: 'https://cdn-4.pishow.tv/live/969/master.m3u8',
+        type: 'redirect'
+      },
       'jalshamovieshd-bdx1': {
         url: 'http://103.165.93.31:8095/jalshaMovies/tracks-v1a1/mono.m3u8',
         type: 'redirect'
