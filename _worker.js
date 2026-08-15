@@ -37,7 +37,7 @@ export default {
         url: 'https://anet.keralive.workers.dev/v1/master/a0d007312bfd99c47f76b77ae26b1ccdaae76cb1/starjalsha_live_https/index.m3u8',
         type: 'redirect'
       },
-      'zeeactionmpd': {
+      'zeeactionmpd-ex': {
         url: 'https://d1g8wgjurz8via.cloudfront.net/bpk-tv/Zeeaction/default/main.mpd',
         type: 'redirect'
       },
