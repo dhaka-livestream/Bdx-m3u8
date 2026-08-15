@@ -33,6 +33,10 @@ export default {
         url: 'http://103.165.93.31:8095/colorsBangla/tracks-v1a1/mono.m3u8',
         type: 'redirect'
       },
+      'starjalshauk': {
+        url: 'https://anet.keralive.workers.dev/v1/master/a0d007312bfd99c47f76b77ae26b1ccdaae76cb1/starjalsha_live_https/index.m3u8',
+        type: 'redirect'
+      },
       'Akash8': {
         url: 'https://mumt03.tangotv.in/Dsly5z3HAAKASHAATH/tracks-v2a1/mono.m3u8',
         type: 'redirect'
